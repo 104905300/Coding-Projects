@@ -1,0 +1,10 @@
+Class name: Exit
+Parent class: Commands
+Subclasses: None
+
+Responsibilities:
+*exit Shell
+
+Collaborators:
+
+

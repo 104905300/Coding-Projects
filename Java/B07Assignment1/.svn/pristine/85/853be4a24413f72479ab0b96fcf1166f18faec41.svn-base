@@ -1,0 +1,13 @@
+Class name: GetURL
+Parent class: Command
+Subclasses: None
+
+Responsibilities: 
+*Get file from url
+*Store url file in the current directory
+
+Collaborators:
+*AccessInternet
+*CurrentLocation
+*Directory
+*File

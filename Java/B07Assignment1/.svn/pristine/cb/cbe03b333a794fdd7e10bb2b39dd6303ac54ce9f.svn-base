@@ -1,0 +1,12 @@
+Class name: MoveFile
+Parent class: Commands
+Subclasses: None
+
+Responsibilities:
+*move file or directory to a new directory(relative or absolute path)
+*rename a file or directory
+
+Collaborators:
+*CopyFile
+*File
+*Directory

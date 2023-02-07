@@ -1,0 +1,11 @@
+Class name: InterpretPath
+Parent class: None
+Subclasses: None
+
+Responsibilities:
+*Check if path is valid(relative or absolute)
+*Go to that path location
+
+Collaborators:
+*Directory
+*CurrentLocation

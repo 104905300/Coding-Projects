@@ -1,0 +1,13 @@
+Class name: Echo
+Parent class: Commands
+Subclasses: None
+
+Responsibilities:
+*Create a new file with given content
+*For an existing file, replace content with given content 
+*For an existing file, append to content with given content.
+
+Collaborators:
+*InterpretPath
+*ModifyFile
+*Files

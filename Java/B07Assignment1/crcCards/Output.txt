@@ -1,0 +1,10 @@
+Class name: Output
+Parent class: None
+Subclasses: None
+
+Responsibilities:
+*Print messages
+
+Collaborators:
+
+

@@ -1,0 +1,11 @@
+Class name: ChangeDirectory
+Parent class: Commands
+Subclasses: None
+
+Responsibilities:
+*change current directory to a specified directory through given path, either absolute or relative
+*check if path is valid
+
+Collaborators:
+*Shell
+

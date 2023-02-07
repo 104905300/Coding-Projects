@@ -1,0 +1,10 @@
+Class name: PrintWorkingDirectory
+Parent class: Commands
+Subclasses: None
+
+Responsibilities:
+*Print the whole path of the current working directory
+
+Collaborators:
+*CurrentLocation
+*Output

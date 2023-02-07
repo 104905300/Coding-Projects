@@ -1,0 +1,12 @@
+Class name: ListFiles
+Parent class: Command
+Subclasses: None 
+
+Responsibilities:
+*Print directory and file name(s) of the current directory.
+
+Collaborators:
+*CurrentLocation
+*Directory
+*File
+*Output

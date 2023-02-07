@@ -1,0 +1,10 @@
+Class name: MakeDirectory
+Parent class: Command
+Subclasses: None
+
+Responsibilities:
+*Create new directory with given name and path (absolute or relative)
+
+Collaborators:
+*InterpretPath
+*Directory

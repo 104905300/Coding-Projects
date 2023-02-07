@@ -1,0 +1,11 @@
+Class name: DisplayContentOfFile
+Parent class: Commands
+Subclasses: None
+
+Responsibilities:
+*Display contents of file in the shell
+
+Collaborators:
+*InterpretPath
+*File
+*Output
