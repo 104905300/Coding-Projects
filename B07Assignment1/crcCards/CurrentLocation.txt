@@ -1,8 +1,0 @@
-Class name: CurrentLocation
-Parent class: None
-Subclasses: None
-
-Responsibilities:
-*Record the current path and directory
-
-Collaborators:

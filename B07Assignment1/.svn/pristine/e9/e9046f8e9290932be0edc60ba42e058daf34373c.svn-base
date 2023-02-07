@@ -1,9 +1,0 @@
-Class name: ModifyFile
-Parent class: None
-Subclasses: None
-
-Responsibilities:
-*Append to or overwrite file contents
-
-Collaborators:
-*File

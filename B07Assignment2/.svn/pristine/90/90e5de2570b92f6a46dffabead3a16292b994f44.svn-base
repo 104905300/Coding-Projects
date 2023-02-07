@@ -1,9 +1,0 @@
-Class name: ErrorOutput
-Parent class (if any): Output
-Subclasses (if any): None
-
-Responsibilities:
-*Display error messages as output to user
-
-Collaborators:
-*None

@@ -1,8 +1,0 @@
-Class name: Directory
-Parent class (if any): FileObj
-Subclasses (if any): None
-
-Responsibilities:
-*Holds other directories or files
-
-Collaborators:

@@ -1,9 +1,0 @@
-Class name: EchoReplace
-Parent class: None
-Subclasses: None
-
-Responsibilities:
-*replace a files old content with given content.
-
-Collaborators:
-*AppendToFile

@@ -1,8 +1,0 @@
-Class name: Input
-Parent class: None
-Subclasses: None
-
-Responsibilities:
-*Detect and read user input
-
-Collaborators:

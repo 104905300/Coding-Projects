@@ -1,8 +1,0 @@
-Class name: AccessInternet
-Parent class: None 
-Subclasses: None
-
-Responsibilities:
-*Access a valid url through the internet
-
-Collaborators:
