@@ -1,0 +1,329 @@
+-- Hotel DB create tables SQL
+
+CREATE TABLE customer(
+  cust_id NUMBER (5), 
+  fname VARCHAR (10) NOT NULL, 
+  lname VARCHAR (15) NOT NULL, 
+  email VARCHAR (20), 
+  phone VARCHAR (10), 
+  age NUMBER (2), 
+  PRIMARY KEY (cust_id), 
+  CHECK (age>=18)) 
+;
+
+CREATE TABLE hotel (
+  hotel_id NUMBER (3),  
+  address VARCHAR (50),
+  city VARCHAR (20),
+  state VARCHAR (15),  
+  phone VARCHAR (10),  
+  rating NUMBER (1),  
+  PRIMARY KEY (hotel_id) ) 
+;  
+
+CREATE TABLE position (
+  pos_id NUMBER (4),  
+  pos_name VARCHAR(30),
+  dep_name VARCHAR(30),
+  min_hours_per_week NUMBER (2),  
+  salary_per_hour NUMBER (5),  
+  permission_level NUMBER (1),  
+  hire_fire CHAR(1),  
+  appoint CHAR(1),  
+  room_entry CHAR(1),
+  spend_budget CHAR(1),
+  PRIMARY KEY (pos_id),
+  CHECK (hire_fire IN ('Y', 'N')),
+  CHECK (appoint IN ('Y', 'N')),
+  CHECK (room_entry IN ('Y', 'N')),
+  CHECK (spend_budget IN ('Y', 'N')))
+;  
+
+CREATE TABLE employee (
+  emp_id NUMBER (4),  
+  pos_id NUMBER (3),  
+  hotel_id NUMBER (3),  
+  fname VARCHAR (10),  
+  lname VARCHAR (15),  
+  email VARCHAR (20),  
+  phone VARCHAR (10),  
+  hire_date DATE,
+  weekly_hours NUMBER (2),
+  PRIMARY KEY (emp_id),  
+  FOREIGN KEY (pos_id) REFERENCES position(pos_id),  
+  FOREIGN KEY (hotel_id) REFERENCES hotel(hotel_id)) 
+;
+
+CREATE TABLE room (
+  room_id NUMBER (3),  
+  service_id NUMBER (3),  
+  booking_id NUMBER (3),  
+  hotel_id NUMBER (3),  
+  floor NUMBER (2),  
+  housek_id NUMBER (2),  
+  occupied CHAR(1),  
+  PRIMARY KEY (room_id),  
+  FOREIGN KEY (hotel_id) REFERENCES hotel(hotel_id),
+  CHECK (occupied IN ('Y', 'N'))) 
+;  
+
+CREATE TABLE booking (
+  booking_id NUMBER (3),  
+  cust_id NUMBER (5),  
+  hotel_id NUMBER (3),  
+  checkin DATE,  
+  checkout DATE,  
+  txn_date DATE,  
+  PRIMARY KEY (booking_id),  
+  FOREIGN KEY (cust_id) REFERENCES customer (cust_id),  
+  FOREIGN KEY (hotel_id) REFERENCES hotel (hotel_id)) 
+;
+
+CREATE TABLE hotel_service (
+  service_id NUMBER (3),  
+  service_name VARCHAR (10),  
+  cost NUMBER (4),
+  room_service CHAR (1),  
+  weekday_access CHAR (1),
+  PRIMARY KEY (service_id),  
+  CHECK (room_service IN ('Y', 'N')),
+  CHECK (weekday_access IN ('Y', 'N')))
+; 
+
+CREATE TABLE service_of_booking (
+  booking_id NUMBER (3) REFERENCES booking (booking_id),  
+  service_id NUMBER (3) REFERENCES hotel_service (service_id),  
+  PRIMARY KEY (booking_id, service_id)); 
+  
+
+-- Design changes
+ALTER TABLE room 
+ADD FOREIGN KEY (service_id) REFERENCES hotel_service (service_id);
+
+ALTER TABLE room
+MODIFY room_id NUMBER(5);
+
+ALTER TABLE room 
+ADD FOREIGN KEY (booking_id) REFERENCES booking (booking_id);  
+
+ALTER TABLE customer 
+ADD credit_card_number CHAR (16);
+
+ALTER TABLE BOOKING
+ADD CONSTRAINT checkoutConstraint CHECK (checkout >= checkin);
+
+ALTER TABLE BOOKING
+ADD CONSTRAINT transactionDateConstraint CHECK (txn_date <= checkin);
+
+ALTER TABLE HOTEL
+MODIFY RATING DECIMAL (2,1);
+
+ALTER TABLE HOTEL_SERVICE
+MODIFY service_name VARCHAR (30);
+
+
+-- NORMALIAZTION of position table (2f to 3f)
+ALTER TABLE position DROP COLUMN hire_fire;
+ALTER TABLE position DROP COLUMN appoint;
+ALTER TABLE position DROP COLUMN room_entry;
+ALTER TABLE position DROP COLUMN spend_budget;
+
+DELETE FROM position;
+
+CREATE TABLE permission (
+  permission_level NUMBER (1),  
+  hire_fire CHAR(1),  
+  appoint CHAR(1),  
+  room_entry CHAR(1),
+  spend_budget CHAR(1),
+  PRIMARY KEY (permission_level),
+  CHECK (hire_fire IN ('Y', 'N')),
+  CHECK (appoint IN ('Y', 'N')),
+  CHECK (room_entry IN ('Y', 'N')),
+  CHECK (spend_budget IN ('Y', 'N')))
+; 
+
+ALTER TABLE position ADD FOREIGN KEY (permission_level) REFERENCES permission (permission_level);
+
+
+-- add extra constraint
+ALTER TABLE customer MODIFY Phone NOT NULL;
+ALTER TABLE customer MODIFY credit_card_number NOT NULL;
+ALTER TABLE customer MODIFY credit_card_number UNIQUE;
+
+ALTER TABLE hotel MODIFY Address NOT NULL;
+ALTER TABLE hotel MODIFY City NOT NULL;
+ALTER TABLE hotel MODIFY State NOT NULL;
+ALTER TABLE hotel MODIFY Phone NOT NULL;
+ALTER TABLE hotel MODIFY Phone UNIQUE;
+ALTER TABLE hotel MODIFY Rating NOT NULL;
+ALTER TABLE hotel ADD CONSTRAINT rating_check CHECK (rating >= 1 and rating <= 5);
+
+ALTER TABLE position MODIFY pos_name NOT NULL;
+ALTER TABLE position MODIFY dep_name NOT NULL;
+ALTER TABLE position MODIFY permission_level NOT NULL;
+
+ALTER TABLE employee MODIFY pos_id NOT NULL;
+ALTER TABLE employee MODIFY FNAME NOT NULL;
+ALTER TABLE employee MODIFY LNAME NOT NULL;
+ALTER TABLE employee MODIFY Phone NOT NULL;
+
+ALTER TABLE room MODIFY SERVICE_ID NOT NULL;
+ALTER TABLE room MODIFY hotel_id NOT NULL;
+ALTER TABLE room MODIFY floor NOT NULL;
+ALTER TABLE room MODIFY housek_id NOT NULL;
+ALTER TABLE room ADD FOREIGN KEY (housek_id) REFERENCES employee (emp_id);  
+
+ALTER TABLE booking MODIFY cust_id NOT NULL;
+ALTER TABLE booking MODIFY hotel_id NOT NULL;
+ALTER TABLE booking MODIFY checkin NOT NULL;
+ALTER TABLE booking MODIFY txn_date NOT NULL;
+
+ALTER TABLE hotel_service MODIFY cost NOT NULL;
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- INSERTION
+INSERT INTO Customer VALUES (1, 'Will','Smith','wsmith@yahoo.com', '1234842952', 54, '2344485038593729');
+INSERT INTO Customer VALUES (2, 'John','Cena','johncena@gmail.com', '4234543452', 45, '7341485036393719');
+INSERT INTO Customer VALUES (3, 'Al','Pacino','alpacino@hotmail.com', '8495821657', 82, '4869482957394754');
+INSERT INTO Customer VALUES (4, 'Jack','Nicholson','jnicholson@yahoo.com', '9485768394', 85, '1245948593850199');
+INSERT INTO Customer VALUES (5, 'Blake','Lively','blively@yahoo.com', '1238475867', 35, '9384576247135543');
+INSERT INTO Customer VALUES (6, 'Ryan','Reynolds','rreynolds@gmail.com', '3854902733', 46, '1948576637458246');
+INSERT INTO Customer VALUES (7, 'Olivia','Rodrigo','orodrigo@yahoo.com', '3953028594', 19, '2837492672833111');
+
+INSERT INTO Hotel VALUES (1, '3775 Danforth Avenue', 'Toronto', 'Ontario', '4163344484', 4.2);
+INSERT INTO Hotel VALUES (2, '978 chemin Hudson', 'Montreal', 'Quebec', '5146881959', 4.6);
+INSERT INTO Hotel VALUES (3, '758 184th Street', 'Edmonton', 'Alberta', '7804463842', 4.2);
+INSERT INTO Hotel VALUES (4, '3910 Woolwick Drive', 'Toronto', 'Ontario', '4164302994', 3.8);
+INSERT INTO Hotel VALUES (5, '879 St. John Street', 'Alida', 'Saskatchewan', '3064435233', 4.0);
+
+INSERT INTO Position VALUES (1, 'Purchasing Director', 'Administration', 30, 35, 2);
+INSERT INTO Position VALUES (2, 'Sales and Marketing Director', 'Administration', 30, 37, 2);
+INSERT INTO Position VALUES (3, 'Receptionist', 'Customer service', 40, 18, 0);
+INSERT INTO Position VALUES (4, 'Porter', 'Customer service', 37, 18, 0);
+INSERT INTO Position VALUES (5, 'Caretaker', 'Customer service', 40, 20, 0);
+INSERT INTO Position VALUES (6, 'Main chef', 'Kitchen', 40, 30, 0);
+INSERT INTO Position VALUES (7, 'Assistant Chef', 'Kitchen', 40, 25, 0);
+INSERT INTO Position VALUES (8, 'Dishwasher', 'Kitchen', 40, 16, 0);
+INSERT INTO Position VALUES (9, 'Housekeeper', 'Cleaning and Maintenance', 40, 22, 1);
+INSERT INTO Position VALUES (10, 'Maintenance technician', 'Cleaning and Maintenance', 30, 28, 2);
+INSERT INTO Position VALUES (11, 'Shift Manager', 'Manager', 40, 40, 3);
+INSERT INTO Position VALUES (12, 'Hotel Manager', 'Manager', 40, 40, 4);
+INSERT INTO Position VALUES (13, 'CEO', 'Manager', 40, 40, 4);
+
+INSERT INTO permission VALUES (0, 'N','N','N','N');
+INSERT INTO permission VALUES (1, 'N','N','Y','N');
+INSERT INTO permission VALUES (2, 'N','N','N','Y');
+INSERT INTO permission VALUES (3, 'N','Y','Y','N');
+INSERT INTO permission VALUES (4, 'Y','Y','Y','Y');
+
+INSERT INTO Hotel_service VALUES (1, 'Standard room', '100', 'N', 'Y');
+INSERT INTO Hotel_service VALUES (2, 'Deluxe room', '180', 'N', 'Y');
+INSERT INTO Hotel_service VALUES (3, 'Suites', '300', 'N', 'Y');
+INSERT INTO Hotel_service VALUES (4, 'VIP Lounge', '400', 'N', 'N');
+INSERT INTO Hotel_service VALUES (5, 'Spa', '150', 'Y', 'N');
+INSERT INTO Hotel_service VALUES (6, 'Alchocol Service', '120', 'Y', 'N');
+INSERT INTO Hotel_service VALUES (7, 'Breakfast', '25', 'Y', 'Y');
+INSERT INTO Hotel_service VALUES (8, 'Lunch', '35', 'Y', 'Y');
+INSERT INTO Hotel_service VALUES (9, 'Dinner', '35', 'Y', 'Y');
+INSERT INTO Hotel_service VALUES (10, 'Massage', '200', 'Y', 'N');
+INSERT INTO Hotel_service VALUES (11, 'Caretaker service', '300', 'Y', 'Y');
+
+INSERT INTO Employee VALUES (1, 13, NULL, 'Hubert', 'Briggs', 'hb1@gmail.com', '1234354345', NULL, 42);
+INSERT INTO Employee VALUES (2, 12, 1, 'Grayson', 'Wheeler', 'gw12@gmail.com', '6234554345', '2021-03-23', 45);
+INSERT INTO Employee VALUES (3, 3, 1, 'John', 'Carpenter', 'jc22@gmail.com', '5492824045', '2020-05-24', 42);
+INSERT INTO Employee VALUES (4, 6, 1, 'Julia', 'Hewitt', 'jh211@gmail.com', '7234344345', '2003-05-13', 41);
+INSERT INTO Employee VALUES (5, 9, 1, 'Alex', 'Santos', 'asa1@gmail.com', '1334374345', '2014-12-02', 43);
+INSERT INTO Employee VALUES (6, 12, 2, 'Taylor', 'Moreno', 'tm21@gmail.com', '6234354345', '2008-08-17', 45);
+INSERT INTO Employee VALUES (7, 3, 2, 'Jacob', 'Townsend', 'jt19@gmail.com', '1236354345', '2009-09-12', 42);
+INSERT INTO Employee VALUES (8, 4, 2, 'Lois', 'Gordon', 'lg271@gmail.com', '1234394345', '2013-06-23', 41);
+INSERT INTO Employee VALUES (9, 5, 2, 'Nick', 'Neal', 'nn1@gmail.com', '1234354395', '2021-08-14', 40);
+INSERT INTO Employee VALUES (10, 12, 3, 'Alma', 'Soto', 'as66@gmail.com', '3934354345', '2022-01-02', 40);
+INSERT INTO Employee VALUES (11, 3, 3, 'Tim', 'Benson', 'tb51@gmail.com', '9474354345', '2014-03-04', 51);
+INSERT INTO Employee VALUES (12, 1, 3, 'Bob', 'Banks', 'bb2211@gmail.com', '1233924345', '2019-02-27', 48);
+INSERT INTO Employee VALUES (13, 7, 3, 'Lee', 'Manning', 'lm948@gmail.com', '1234359275', '2020-04-18', 41);
+INSERT INTO Employee VALUES (14, 12, 4, 'Molly', 'Dennis', 'md137@gmail.com', '1239381345', '2021-02-13', 41);
+INSERT INTO Employee VALUES (15, 2, 4, 'Edgar', 'Alvarez', 'eash1@gmail.com', '1294854345', '2019-10-21', 40);
+INSERT INTO Employee VALUES (16, 3, 4, 'Grayson', 'Cress', 'gc139@gmail.com', '1229001345', '2020-09-11', 40);
+INSERT INTO Employee VALUES (17, 11, 4, 'Darell', 'Vega', 'dv81@gmail.com', '1234352225', '2020-06-03', 40);
+INSERT INTO Employee VALUES (18, 10, 4, 'Bonnie', 'Sutton', 'bs199@gmail.com', '4534114345', '2021-02-19', 42);
+INSERT INTO Employee VALUES (19, 12, 5, 'Minerva', 'Woolridge', 'mwei133@gmail.com', '9384530223', '2021-03-28', 41);
+INSERT INTO Employee VALUES (20, 1, 5, 'Wilfrid', 'Freeman', 'wf99@gmail.com', '9817384493', '2022-04-13', 42);
+INSERT INTO Employee VALUES (21, 8, 5, 'Eddie', 'Dolton', 'eddie33@gmail.com', '3772835044', '2021-12-01', 41);
+INSERT INTO Employee VALUES (22, 3, 5, 'Tammy', 'Preston', 'tammyp13@gmail.com', '2938459344', '2021-11-18', 41);
+INSERT INTO Employee VALUES (23, 9, 5, 'Lily', 'James', 'ljames3@gmail.com', '2939259944', '2021-11-12', 41);
+
+INSERT INTO Room VALUES (1101, 1, NULL, 1, 1, 23, 'N');
+INSERT INTO Room VALUES (1102, 2, NULL, 1, 1, 23, 'N');
+INSERT INTO Room VALUES (1201, 1, NULL, 1, 2, 5, 'N');
+INSERT INTO Room VALUES (1202, 3, NULL, 1, 2, 5, 'N');
+INSERT INTO Room VALUES (2101, 1, NULL, 2, 1, 23, 'N');
+INSERT INTO Room VALUES (2102, 2, NULL, 2, 1, 23, 'N');
+INSERT INTO Room VALUES (2201, 1, NULL, 2, 2, 5, 'N');
+INSERT INTO Room VALUES (2202, 3, NULL, 2, 2, 5, 'N');
+INSERT INTO Room VALUES (3101, 2, NULL, 3, 1, 5, 'N');
+INSERT INTO Room VALUES (3102, 3, NULL, 3, 1, 23, 'N');
+INSERT INTO Room VALUES (3201, 1, NULL, 3, 2, 5, 'N');
+INSERT INTO Room VALUES (3202, 1, NULL, 3, 2, 5, 'N');
+INSERT INTO Room VALUES (4101, 1, NULL, 4, 1, 23, 'N');
+INSERT INTO Room VALUES (4102, 2, NULL, 4, 1, 23, 'N');
+INSERT INTO Room VALUES (4201, 1, NULL, 4, 2, 5, 'N');
+INSERT INTO Room VALUES (4202, 1, NULL, 4, 2, 23, 'N');
+INSERT INTO Room VALUES (5101, 2, NULL, 5, 1, 5, 'N');
+INSERT INTO Room VALUES (5102, 2, NULL, 5, 1, 23, 'N');
+INSERT INTO Room VALUES (5201, 1, NULL, 5, 2, 23, 'N');
+INSERT INTO Room VALUES (5202, 1, NULL, 5, 2, 5, 'N');
+
+INSERT INTO Booking VALUES (1, 1, 1, '2022-12-23', '2022-12-24', '2022-11-20');
+INSERT INTO Booking VALUES (2, 2, 2, '2023-01-03', '2023-01-05', '2022-12-02');
+INSERT INTO Booking VALUES (3, 3, 4, '2023-01-12', '2023-01-19', '2022-11-29');
+INSERT INTO Booking VALUES (4, 4, 5, '2022-12-18', '2022-12-20', '2022-11-22');
+INSERT INTO Booking VALUES (5, 6, 1, '2022-12-27', '2022-12-28', '2022-12-02');
+INSERT INTO Booking VALUES (6, 7, 1, '2022-12-09', '2022-12-11', '2022-12-01');
+
+INSERT INTO service_of_booking VALUES (1, 1);
+INSERT INTO service_of_booking VALUES (1, 4);
+INSERT INTO service_of_booking VALUES (1, 8);
+INSERT INTO service_of_booking VALUES (2, 2);
+INSERT INTO service_of_booking VALUES (3, 1);
+INSERT INTO service_of_booking VALUES (3, 5);
+INSERT INTO service_of_booking VALUES (4, 3);
+INSERT INTO service_of_booking VALUES (4, 4);
+INSERT INTO service_of_booking VALUES (4, 5);
+INSERT INTO service_of_booking VALUES (4, 7);
+INSERT INTO service_of_booking VALUES (5, 2);
+INSERT INTO service_of_booking VALUES (6, 3);
+INSERT INTO service_of_booking VALUES (6, 4);
+INSERT INTO service_of_booking VALUES (6, 6);
+INSERT INTO service_of_booking VALUES (6, 7);
+
+
+-- REPORT
+-- first statement
+SELECT AVG(rating)
+FROM hotel;
+-- second statement
+SELECT room_id, housek_id
+FROM room 
+WHERE (housek_id = 5);
+-- third statement
+SELECT fname, lname, age 
+FROM customer 
+where (age >= 65);
+-- fourth statement
+SELECT COUNT(booking_id), hotel_id
+FROM booking
+GROUP BY hotel_id;
+-- fifth statement
+SELECT pos_name,
+Min_hours_per_Week * salary_per_hour AS min_salary_per_week
+FROM position;
+
+
+
+
+
+
+
+
+
