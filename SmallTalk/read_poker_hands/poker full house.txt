@@ -1,0 +1,40 @@
+pokerFullHouse: arr
+	"comment stating purpose of instance-side message"
+	"scope: class-variables  &  instance-variables"	
+			
+	|lab2Obj validhand ind occurrence pairOccurred triOccurred fullHouse|
+	
+	lab2Obj := (self class) new.
+	
+	validhand := lab2Obj pokerValidate: arr.
+	
+	ind := 1.
+	pairOccurred := false.
+	triOccurred := false.
+	fullHouse := false.
+	
+	validhand ifTrue: [
+		[ind < ((arr size) + 1)] whileTrue: [
+			occurrence := arr occurrencesOf: (arr at: ind).
+			
+			((occurrence = 4)) ifTrue: [
+				fullHouse := false.
+				ind := ((arr size) + 1).
+			].	
+			
+			"full house only true if triple and pair occured"
+			(occurrence = 2) ifTrue: [
+				pairOccurred := true.
+			].
+			(occurrence = 3) ifTrue: [
+				triOccurred := true.
+			].
+			pairOccurred & triOccurred ifTrue: [ 
+				fullHouse := true.
+				ind := ((arr size) + 1).
+			 ].
+	   		ind := ind + 1.
+		]. 	
+	].
+	
+	^ fullHouse.

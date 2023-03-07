@@ -1,0 +1,31 @@
+pokerThreeOfAKind: arr
+	"comment stating purpose of instance-side message"
+	"scope: class-variables  &  instance-variables"	
+	|lab2Obj validhand ind occurrence pairOrQuadsOccurred triOccurred|
+	
+	lab2Obj := (self class) new.
+	
+	validhand := lab2Obj pokerValidate: arr.
+	
+	ind := 1.
+	pairOrQuadsOccurred := false.
+	triOccurred := false.
+	
+	validhand ifTrue: [
+		[ind < ((arr size) + 1)] whileTrue: [
+			occurrence := arr occurrencesOf: (arr at: ind).
+			"if pair or quads occured then it's not 3 of a kind, exit the loop at next iteration"
+			((occurrence = 2) | (occurrence = 4)) ifTrue: [
+				pairOrQuadsOccurred := true.
+				ind := ((arr size) + 1).
+			].
+			(occurrence = 3) ifTrue: [
+				triOccurred := true.
+			].
+	   		ind := ind + 1.
+		]. 	
+	].
+
+^ validhand & triOccurred & (pairOrQuadsOccurred not).
+
+	

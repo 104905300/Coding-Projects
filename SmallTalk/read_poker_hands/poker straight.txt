@@ -1,0 +1,34 @@
+pokerStraight: arr
+	"comment stating purpose of instance-side message"
+	"scope: class-variables  &  instance-variables"	
+			
+	|lab2Obj validhand ind arrSorted straight|
+	
+	lab2Obj := (self class) new.
+	
+	validhand := lab2Obj pokerValidate: arr.
+	
+	"assume it's true first, change to false if not true"
+	straight := true.
+	
+	validhand ifTrue: [ 
+		arrSorted := arr asSortedCollection.
+		ind := 1.
+		
+		"This is for A 10 11 12 13 straight. If hand starts with 1 10, check straight starting from 10"
+		((arrSorted at: 1) = 1) & ((arrSorted at: 2) = 10) ifTrue: [
+			ind := 2.
+		].
+	
+		[ind < ((arr size))] whileTrue: [
+			
+			"if the next num in list is not one higher than the previous, exit loop at next iteration"
+			((arrSorted at: ind) + 1) = ((arrSorted at: (ind + 1))) ifFalse: [
+				straight := false.
+				ind := (arr size).
+			].
+			ind := ind + 1.
+		].
+	].
+
+	^ (validhand & straight).

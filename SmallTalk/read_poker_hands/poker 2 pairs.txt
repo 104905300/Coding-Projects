@@ -1,0 +1,37 @@
+pokerTwoPair: arr
+	"comment stating purpose of instance-side message"
+	"scope: class-variables  &  instance-variables"	
+			
+	|lab2Obj validhand ind occurrence twoOccurrences twoPair|
+	
+	lab2Obj := (self class) new.
+	
+	validhand := lab2Obj pokerValidate: arr.
+	
+	twoOccurrences := 0.
+	twoPair := false.
+	ind := 1.
+	
+	validhand ifTrue: [
+		[ind < ((arr size) + 1)] whileTrue: [
+			occurrence := arr occurrencesOf: (arr at: ind).
+			
+			((occurrence = 3) | (occurrence = 4)) ifTrue: [
+				twoPair := false.
+				ind := ((arr size) + 1).
+			].
+			
+			(occurrence = 2) ifTrue: [
+				twoOccurrences := twoOccurrences + 1.
+			].
+		
+			"if number of twoOccurrences = 3, it means it detect 2 differnt pairs (2 of those 			twoOccurrences is 	from the same pair, so the third one must be for a different pair)."
+			(twoOccurrences = 3) ifTrue: [
+				twoPair := true.
+				ind := ((arr size) + 1).
+			].
+	   		ind := ind + 1.
+		]. 	
+	].
+	
+	^ twoPair.

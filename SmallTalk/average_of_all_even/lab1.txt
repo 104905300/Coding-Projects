@@ -1,0 +1,60 @@
+|evenList whileTrueFunc doLoopFunc randomNumListFunc index sum average evenListSize random arr1 arr2 arr3 arr4| 
+
+Transcript clear.
+
+arr1 := #(84 45 54 456 456 33 34).
+arr2 := #(706 348 435 430 278 736 803 683 248 873).
+arr3 := #(323 274 711 918 772 727 13 724 593 215).
+arr4 := Array new: 10.
+
+
+whileTrueFunc := [ :li | 
+	index := 1.
+	sum := 0.0.
+	evenList := li select: [:i | i \\ 2 = 0 ].
+	evenListSize := evenList size.
+	
+	[index < (evenListSize + 1)] whileTrue: [ 
+		sum := sum + (evenList at: index). 
+		index := index + 1.
+	].
+	average := sum / evenListSize
+].
+
+
+doLoopFunc :=  [ :li | 
+	index := 1.
+	sum := 0.0.
+	evenList := li select: [:i | i \\ 2 = 0 ].
+	evenListSize := evenList size.
+	
+	evenList do: [:element | sum := sum + element].
+	average := sum / evenListSize.
+].
+
+
+randomNumListFunc := [ 
+	index := 1.
+	10 timesRepeat: [
+		random := Random new next.
+		random := random * 1000.
+		random := random truncated.  
+		arr4 at: index put: random.
+		index := index + 1.
+	 ].
+].
+
+
+Transcript show: 'whileTrue loop:'; cr.
+Transcript show: (whileTrueFunc value: arr1); cr.
+Transcript show: (whileTrueFunc value: arr2); cr.
+Transcript show: (whileTrueFunc value: arr3); cr; cr.
+
+Transcript show: 'do loop:'; cr.
+Transcript show: (doLoopFunc value: arr1); cr.
+Transcript show: (doLoopFunc value: arr2); cr.
+Transcript show: (doLoopFunc value: arr3); cr; cr.
+
+Transcript show: 'random number list:'; cr.
+randomNumListFunc value.
+Transcript show: arr4; cr.
